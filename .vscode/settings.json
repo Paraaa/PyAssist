@@ -1,0 +1,9 @@
+{
+    "python.formatting.provider": "none",
+    "black-formatter.importStrategy": "fromEnvironment",
+    "[python]": {
+        "editor.formatOnSave": true,
+        "editor.defaultFormatter": "ms-python.black-formatter"
+    },
+    "debugpy.debugJustMyCode": false
+}
