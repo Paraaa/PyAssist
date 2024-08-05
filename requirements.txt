@@ -1,0 +1,9 @@
+wheel
+pyaudio
+pocketsphinx
+pyttsx3
+openwakeword
+SpeechRecognition
+numpy
+black
+TTS
