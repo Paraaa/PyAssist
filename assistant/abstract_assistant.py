@@ -1,3 +1,4 @@
+import re
 import numpy as np
 from TTS.api import TTS
 from abc import ABC, abstractmethod
@@ -21,7 +22,19 @@ class AbstractAssistant(ABC):
     def respond(self, speech: Optional[str] = "") -> None:
         pass  # Implement this method in subclasses to handle the response to speech
 
+    def sanitize_text(self, text: str) -> str:
+        """
+        Removes all special characters from the text.
+        This is required as the TTS engine can't handle special characters well
+        1. Remove non-alphanumeric characters except spaces
+        2. Replace multiple spaces with a single space
+        """
+        sanitized_text = re.sub(r"\W+_", " ", text)
+        sanitized_text = re.sub(r"\s+", " ", sanitized_text).strip()
+        return sanitized_text
+
     def say(self, text: str) -> None:
+        text = self.sanitize_text(text)
         wav = np.array(self.tts_engine.tts(text))
         self.play_audio(wav)
 

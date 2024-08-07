@@ -9,4 +9,6 @@ class SimpleAssistant(AbstractAssistant):
         self.assistant_id = "Simple"
 
     def respond(self, speech: Optional[str] = "") -> None:
+        if not speech:
+            return
         self.say("Hi ich bin Astra")

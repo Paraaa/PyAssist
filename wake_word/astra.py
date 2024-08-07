@@ -1,4 +1,5 @@
 import pyaudio
+import time
 import numpy as np
 import speech_recognition as sr
 from openwakeword.model import Model
@@ -8,9 +9,11 @@ from utils.settings.audio_settings import (
     CHANNELS,
     RATE,
     CHUNK,
+    SAMPLE_RATE,
     AUDIO,
     DEBOUNCE_TIME,
     THRESHOLD,
+    RECOGNITION_TIMEOUT,
 )
 from utils.settings.assistant_settings import ASSISTANTS
 from assistant.abstract_assistant import AbstractAssistant
@@ -33,9 +36,9 @@ class Astra:
             frames_per_buffer=CHUNK,
         )
         self.recognizer = sr.Recognizer()
-        self.mic = sr.Microphone()
+        self.mic = sr.Microphone(sample_rate=SAMPLE_RATE, chunk_size=CHUNK)
 
-    def listen(self) -> None:
+    def listen_to_wake_word(self) -> None:
         audio = np.frombuffer(self.mic_stream.read(CHUNK), dtype=np.int16)
 
         prediction = self.model.predict(
@@ -56,22 +59,30 @@ class Astra:
 
     def listen_to_speech(self) -> Union[str, None]:
         speech = None
+
+        print("Listening...")
+        start_time = time.time()
         with self.mic as source:
-            print("Listening...")
-            audio = self.recognizer.listen(source)
-        try:
-            speech = self.recognizer.recognize_google(audio, language="de-DE")
-            print(speech)
-        except sr.UnknownValueError:
-            speech = None
-            print("Could not understand audio")
+            try:
+                audio = self.recognizer.listen(source, timeout=RECOGNITION_TIMEOUT)
+
+            except sr.WaitTimeoutError:
+                print("Timeout while waiting for speech...")
+                print(f"End time: {time.time() - start_time }")
+                return None
+
+            try:
+                speech = self.recognizer.recognize_google(audio, language="de-DE")
+            except sr.UnknownValueError:
+                print("Could not understand audio")
+                return None
 
         return speech
 
     def determine_assistant(self, speech: str) -> str:
         if not speech:
             return "Simple"
-        
+
         # TODO: Let the classification be done by chatgpt
         if "Uhrzeit" in speech:
             return "Time"

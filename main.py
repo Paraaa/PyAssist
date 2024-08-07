@@ -5,4 +5,4 @@ if __name__ == "__main__":
     astra = Astra()
 
     while True:
-        astra.listen()
+        astra.listen_to_wake_word()
