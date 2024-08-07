@@ -17,16 +17,21 @@ from utils.settings.audio_settings import (
 )
 from utils.settings.assistant_settings import ASSISTANTS
 from assistant.abstract_assistant import AbstractAssistant
+from LLM.classification_llm import CLASSIFICATION_LLM
 
 
 class Astra:
 
     def __init__(self) -> None:
+        # Wake word detection variables
         self.model = Model(wakeword_models=["alexa"])
         self.wake_words: List[str] = ["alexa"]
 
+        # Assistant variables
         self.assistants: Dict[str, AbstractAssistant] = ASSISTANTS
+        self.classification_llm = CLASSIFICATION_LLM()
 
+        # Audio variables
         self.audio = pyaudio.PyAudio()
         self.mic_stream = AUDIO.open(
             format=FORMAT,
@@ -80,13 +85,6 @@ class Astra:
         return speech
 
     def determine_assistant(self, speech: str) -> str:
-        if not speech:
-            return "SimpleChat"
-
-        # TODO: Let the classification be done by chatgpt
-        if "Uhrzeit" in speech:
-            return "Time"
-        if "Witz" in speech:
-            return "Joke"
-        else:
-            return "SimpleChat"
+        assistant = self.classification_llm.process(speech=speech)
+        print("Selected assistant: ", assistant)
+        return assistant

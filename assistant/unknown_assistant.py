@@ -2,13 +2,13 @@ from assistant.abstract_assistant import AbstractAssistant
 from typing import Optional
 
 
-class SimpleChatAssistant(AbstractAssistant):
+class UnknownAssistant(AbstractAssistant):
 
     def __init__(self):
         super().__init__()
-        self.assistant_id = "SimpleChat"
+        self.assistant_id = "Unknown"
 
     def respond(self, speech: Optional[str] = "") -> None:
-        if not speech:
-            return
-        self.say("Hi ich bin Astra")
+        self.say(
+            "Ich konnte dich leider nicht verstehen. Bitter versuche es später erneut."
+        )
