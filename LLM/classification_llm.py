@@ -15,9 +15,7 @@ class CLASSIFICATION_LLM(LLM):
         if not speech:
             return "Unknown"
         prompt = self.format_prompt(speech)
-        print(prompt)
         assistant = self.ask(prompt)
-
         if not assistant in self.assistants:
             return "Unknown"
         return assistant

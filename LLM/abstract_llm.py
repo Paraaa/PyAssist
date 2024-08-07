@@ -2,6 +2,7 @@ from openai import OpenAI
 from utils.env import OPEN_AI_API_KEY
 from utils.settings.llm_settings import MODEL
 from abc import ABC, abstractmethod
+from typing import List, Dict
 
 
 class LLM(ABC):
@@ -9,7 +10,9 @@ class LLM(ABC):
     def __init__(self):
         self.client = OpenAI(api_key=OPEN_AI_API_KEY)  # Initialize the OpenAI client
 
-    def ask(self, prompt: str, max_tokens: int = 60) -> str:
+    def ask(
+        self, prompt: str, max_tokens: int = 60, history: List[Dict[str, str]] = []
+    ) -> str:
         message = []
         message.append(
             {
@@ -17,7 +20,11 @@ class LLM(ABC):
                 "content": "You are an AI assistant that helps people find information.",
             }
         )
+        # If the history is not empty
+        if history:
+            message.extend(history)
         message.append({"role": "user", "content": prompt})
+        print(message)
         response = self.client.chat.completions.create(
             model=MODEL,
             messages=message,
