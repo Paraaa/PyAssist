@@ -6,7 +6,7 @@ class SimpleAssistant(AbstractAssistant):
 
     def __init__(self):
         super().__init__()
-        self.assistant_id = "Simple"
+        self.assistant_id = "SimpleChat"
 
     def respond(self, speech: Optional[str] = "") -> None:
         if not speech:

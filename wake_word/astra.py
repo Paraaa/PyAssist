@@ -81,7 +81,7 @@ class Astra:
 
     def determine_assistant(self, speech: str) -> str:
         if not speech:
-            return "Simple"
+            return "SimpleChat"
 
         # TODO: Let the classification be done by chatgpt
         if "Uhrzeit" in speech:
@@ -89,4 +89,4 @@ class Astra:
         if "Witz" in speech:
             return "Joke"
         else:
-            return "Simple"
+            return "SimpleChat"

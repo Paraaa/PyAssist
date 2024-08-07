@@ -3,7 +3,7 @@ from assistant.time_assistant import TimeAssistant
 from assistant.joke_assistant import JokeAssistant
 
 ASSISTANTS = {
-    "Simple": SimpleAssistant(),
+    "SimpleChat": SimpleAssistant(),
     "Time": TimeAssistant(),
     "Joke": JokeAssistant(),
 }
