@@ -35,6 +35,7 @@ class AbstractAssistant(ABC):
 
     def say(self, text: str) -> None:
         text = self.sanitize_text(text)
+        print("Sanitizing text: ", text)
         wav = np.array(self.tts_engine.tts(text))
         self.play_audio(wav)
 

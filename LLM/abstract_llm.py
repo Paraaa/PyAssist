@@ -1,3 +1,4 @@
+import json
 from openai import OpenAI
 from utils.env import OPEN_AI_API_KEY
 from utils.settings.llm_settings import MODEL
@@ -24,7 +25,6 @@ class LLM(ABC):
         if history:
             message.extend(history)
         message.append({"role": "user", "content": prompt})
-        print(message)
         response = self.client.chat.completions.create(
             model=MODEL,
             messages=message,
@@ -33,6 +33,13 @@ class LLM(ABC):
             n=1,
         )
         return response.choices[0].message.content
+
+
+    def to_json(self, response: str) -> Dict:
+        try:
+            return json.loads(response)
+        except json.JSONDecodeError:
+            return {}
 
     @abstractmethod
     def process(self, *args, **kwargs):

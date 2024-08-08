@@ -18,7 +18,6 @@ class JokeAssistant(AbstractAssistant):
                 joke = joke_data[0].get(
                     "text", "Entschuldigung, ich konnte keinen Witz abrufen."
                 )
-                print(joke, type(joke))
             return joke
         except requests.RequestException as e:
             return f"Fehler beim Abrufen des Witzes: {e}"
