@@ -9,3 +9,4 @@ black
 TTS
 requests
 openai
+todoist-api-python

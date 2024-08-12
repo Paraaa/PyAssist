@@ -1,6 +1,8 @@
 # API
 utils/env.py
 
+# Other extensions
+.VSCodeCounter
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
