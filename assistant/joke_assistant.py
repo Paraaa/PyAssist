@@ -1,6 +1,7 @@
 import requests
 from typing import Optional
 from assistant.abstract_assistant import AbstractAssistant
+from utils.settings.default_messages_settings import JOKE_RESPONSES
 
 
 class JokeAssistant(AbstractAssistant):
@@ -16,7 +17,7 @@ class JokeAssistant(AbstractAssistant):
             if response.status_code == 200:
                 joke_data = response.json()
                 joke = joke_data[0].get(
-                    "text", "Entschuldigung, ich konnte keinen Witz abrufen."
+                    "text", JOKE_RESPONSES.get("JOKE_NOT_FOUND", "")
                 )
             return joke
         except requests.RequestException as e:

@@ -1,4 +1,5 @@
 from assistant.abstract_assistant import AbstractAssistant
+from utils.settings.default_messages_settings import DEFAULT_RESPONSES
 from typing import Optional
 
 
@@ -9,6 +10,4 @@ class UnknownAssistant(AbstractAssistant):
         self.assistant_id = "Unknown"
 
     def respond(self, speech: Optional[str] = "") -> None:
-        self.say(
-            "Ich konnte dich leider nicht verstehen. Bitte versuche es später erneut."
-        )
+        self.say(DEFAULT_RESPONSES.get("ERROR", ""))
