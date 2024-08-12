@@ -20,13 +20,25 @@ class TIMER_LLM(LLM):
 
     def format_prompt(self, prompt: str = ""):
         formatted_prompt = f"""
-                Du bekommst die Aufgabe, aus dem gegebenen Text Informationen für einen Timer zu extrahieren. Deine Antwort soll in einem Json Format sein.
+                Du bekommst die Aufgabe, aus dem gegebenen Text Informationen für einen Timer zu extrahieren. Dabei gibt es verschiedene Funktionen bei dem Timer: start_timer, end_timer, time_left. Deine Antwort soll in einem Json Format sein.
 
                 Beispiel Timer Text: "Stell einen Timer auf 10 Minuten"
-                Beispiel Antwort: {{ "id": "", "duration": "600", "time_text": "10 Minuten" }}
+                Beispiel Antwort: {{ "id": "", function:"start_timer", "duration": "600", "time_text": "10 Minuten"}}
 
                 Beispiel Timer Text: "Stell einen Eier-Timer auf 7 Minuten und 30 Sekunden"
-                Beispiel Antwort: {{ "id": "Eier", "duration": "450", "time_text": "7 Minuten und 30 Sekunden" }}
+                Beispiel Antwort: {{ "id": "Eier", function:"start_timer", "duration": "450", "time_text": "7 Minuten und 30 Sekunden"}}
+
+                Beispiel Timer Text: "Beende den Eier-Timer"
+                Beispiel Antwort: {{ "id": "Eier", function:"end_timer"}}
+
+                Beispiel Timer Text: "Beende den zweiten Timer"
+                Beispiel Antwort: {{ "id": "2", function:"end_timer"}}
+
+                Beispiel Timer Text: "Wie lange geht der Eier-Timer?"
+                Beispiel Antwort: {{ "id": "Eier", function:"time_left"}}
+
+                Beispiel Timer Text: "Wie lange geht der erste Timer?"
+                Beispiel Antwort: {{ "id": "1", function:"time_left"}}
 
                 Timer Text: "{prompt}"
                 Antwort: 
