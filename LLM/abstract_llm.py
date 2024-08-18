@@ -34,7 +34,6 @@ class LLM(ABC):
         )
         return response.choices[0].message.content
 
-
     def to_json(self, response: str) -> Dict:
         try:
             return json.loads(response)
@@ -45,6 +44,7 @@ class LLM(ABC):
     def process(self, *args, **kwargs):
         pass  # Implement this method in subclasses to handle processing of messages
 
+    # TODO: Extract this to a seperate file for each llm assistant with unique replace symbols?
     @abstractmethod
     def format_prompt(self, prompt: str = ""):
         pass  # Implement this method in subclasses format the prompt for the desired function

@@ -20,9 +20,7 @@ class TimerAssistant(AbstractAssistant):
         # Check if the response is empty, i. e. if the llm did not format the response correctly
         if not response:
             self.say(DEFAULT_RESPONSES.get("ERROR", ""))
-        print(response)
         self.classify_task(response)
-        print(self.active_timer)
 
     def classify_task(self, response: Dict[str, str]):
         task = response.get("function", None)

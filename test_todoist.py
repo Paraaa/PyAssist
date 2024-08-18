@@ -1,18 +1,10 @@
-from todoist_api_python.api import TodoistAPI
-from utils.env import TODOIST_API_KEY
-import asyncio
+from assistant.todoist_assistant import TodoistAssistant
 
 
-async def main():
-    api = TodoistAPI(TODOIST_API_KEY)
-    try:
-        projects = await api.get_projects()
-        tasks = await api.get_tasks()
-        print(projects)
-        print(tasks)
-    except Exception as e:
-        print(e)
+def main():
+    todoist_assistant = TodoistAssistant()
+    response = todoist_assistant.respond("Schreibe Tomaten auf meine Einkausliste.")
 
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    main()
