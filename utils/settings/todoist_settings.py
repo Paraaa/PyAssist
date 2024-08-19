@@ -1,3 +1,1 @@
-EXCLUDE_PROJECTS = (
-    []
-)  # Populate this with a a list of project id for project to be excluded
+PROJECT_ID = "2337762329"  # Define the project ID for the todoist integration
