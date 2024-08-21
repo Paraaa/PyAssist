@@ -3,6 +3,7 @@ utils/env.py
 
 # Other extensions
 .VSCodeCounter
+.log
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
