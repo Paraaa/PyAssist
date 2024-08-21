@@ -25,9 +25,12 @@ class TodoistAssistant(AbstractAssistant):
         if not response:
             return
         function = response.get("function", None)
+        print(response)
         match function:
             case "create_task":
                 self.create_task(response)
+            case "list_tasks":
+                self.list_tasks(response)
             case _:
                 self.say(DEFAULT_RESPONSES.get("ERROR", ""))
 
@@ -43,6 +46,15 @@ class TodoistAssistant(AbstractAssistant):
                 self.say(f"Die Aufgabe '{task_content}' wurde erstellt.")
         except Exception as e:
             self.say(DEFAULT_RESPONSES.get("ERROR", ""))
+
+    def list_tasks(self, response: Dict[str, str]):
+        tasks_content = response.get("tasks_content", [])
+        if not tasks_content:
+            self.say(f"Du hast keine passenden aktiven Aufgaben")
+
+        self.say(f"Auf deine Lister stehen folgende Aufgaben")
+        for task in tasks_content:
+            self.say(f"{task}")
 
     def get_project(self) -> Dict[str, Union[Project, Task]]:
         # This is done to filter out the unnecessary information for the llm

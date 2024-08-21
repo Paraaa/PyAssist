@@ -46,11 +46,20 @@ class TODOIST_LLM(LLM):
                 Beispiel Todoist Text: "Schreibe Brot und Butter auf meine Einkaufsliste"
                 Beispiel Antwort: {{ "section_id": "263358345", "function":"create_task", "tasks_content": ["Brot", "Butter"]}}
 
+                Beispiel Todoist Text: "Was steht auf meiner Einkaufsliste"
+                Beispiel Antwort: {{ "section_id": "263357699", "function":"list_tasks", "tasks_content": ["Kaffee", "Zwiebel", "Paprika"]}}
+
                 Beispiel Todoist Text: "Erinnere mich daran in der Küche zu Staubsaugen"
                 Beispiel Antwort: {{ "section_id": "263358345", "function":"create_task", "tasks_content": ["Staubsaugen in Küche"]}}
                 
+                Beispiel Todoist Text: "Was muss ich heute im Haushalt erledigen?"
+                Beispiel Antwort: {{ "section_id": "263358345", "function":"list_tasks", "tasks_content": ["Spühlmaschine ausräumen"]}}
+
+                Beispiel Todoist Text: "Muss ich heute etwas am Auto machen?"
+                Beispiel Antwort: {{ "section_id": "", "function":"list_tasks", "tasks_content": []}}
+
                 Beispiel Todoist Text: "Erinnere mich daran mich für die Linear Algebra Prüfung anzumelden"
-                Beispiel Antwort: {{ "section_id": "", "function":"create_task", "tasks_content": ["Anmelden Prüfung Lineare Algebra"]}}
+                Beispiel Antwort: {{ "section_id": "", "function":"create_task", "tasks_content": ["Anmelden Prüfung Lineare Algebra"]}}                
 
                 Aktuell sind folgende Aufgaben im Project: { tasks }
                 Aktuell gibt es folgende Abschnitte: { sections }
