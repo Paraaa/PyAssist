@@ -1,4 +1,5 @@
 import json
+import logging
 from openai import OpenAI
 from env import OPEN_AI_API_KEY
 from utils.settings.llm_settings import MODEL
@@ -6,12 +7,13 @@ from abc import ABC, abstractmethod
 from typing import List, Dict
 from utils.logging.logger import LOGGER
 
+logger = logging.getLogger("LLM")
+
 
 class LLM(ABC):
 
     def __init__(self):
         self.client = OpenAI(api_key=OPEN_AI_API_KEY)  # Initialize the OpenAI client
-        self.logger = LOGGER("LLM", "llm/abstract_llm.log")
 
     def ask(
         self, prompt: str, max_tokens: int = 60, history: List[Dict[str, str]] = []
@@ -40,7 +42,7 @@ class LLM(ABC):
         try:
             return json.loads(response)
         except json.JSONDecodeError:
-            self.logger.exception(f"JSON decoding failed for {response}")
+            logger.exception(f"JSON decoding failed for {response}")
             return {}
 
     @abstractmethod

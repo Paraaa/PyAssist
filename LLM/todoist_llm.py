@@ -21,7 +21,6 @@ class TODOIST_LLM(LLM):
         return response_json
 
     def format_prompt(self, prompt: str = "", **kwargs):
-        print(prompt)
         project = kwargs.get("project", {})
         tasks = project.get("active_tasks", {})
         sections = project.get("sections", {})

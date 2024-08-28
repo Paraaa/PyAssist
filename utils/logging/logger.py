@@ -4,6 +4,10 @@ from typing import List, Dict, Union, Optional
 from utils.settings.logger_settings import LOGDIR
 
 
+import traceback
+
+
+@DeprecationWarning
 class LOGGER:
     def __init__(self, name: str, log_file: str, level: int = logging.INFO):
         self.log_path = f"{LOGDIR}{log_file}"
@@ -14,6 +18,7 @@ class LOGGER:
         )
         self.logger = logging.getLogger(name)
         print(self.logger)
+        traceback.print_stack()
         # Set the log level to capture all log messages above the set level
         self.logger.setLevel(level)
         self._create_log_file()
