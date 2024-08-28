@@ -18,11 +18,14 @@ from utils.settings.audio_settings import (
 from utils.settings.assistant_settings import ASSISTANTS
 from assistant.abstract_assistant import AbstractAssistant
 from LLM.classification_llm import CLASSIFICATION_LLM
+from utils.logging.logger import LOGGER
 
 
 class Astra:
 
     def __init__(self) -> None:
+        self.logger = LOGGER("Astra", "astra/astra.log")
+
         # Wake word detection variables
         self.model = Model(wakeword_models=["alexa"])
         self.wake_words: List[str] = ["alexa"]
@@ -55,36 +58,38 @@ class Astra:
             score = prediction[wake_word]
             is_wake_word_detected = score > 0.5
             if is_wake_word_detected:
+                self.logger.info(f"Wake word '{wake_word}' detected")
                 speech = self.listen_to_speech()
                 assistant_id = self.determine_assistant(speech)
                 assistant = self.assistants.get(assistant_id, None)
                 if assistant:
                     assistant.respond(speech)
-                print("Listening for wake words...")
+                self.logger.info("Listen for wake words...")
 
     def listen_to_speech(self) -> Union[str, None]:
         speech = None
 
-        print("Listening...")
+        self.logger.info("Listen to speech...")
         start_time = time.time()
         with self.mic as source:
             try:
                 audio = self.recognizer.listen(source, timeout=RECOGNITION_TIMEOUT)
 
             except sr.WaitTimeoutError:
-                print("Timeout while waiting for speech...")
-                print(f"End time: {time.time() - start_time }")
+                self.logger.warning("Timeout while waiting for speech...")
+                self.logger.debug(f"End time: {time.time() - start_time}")
                 return None
 
             try:
                 speech = self.recognizer.recognize_google(audio, language="de-DE")
             except sr.UnknownValueError:
-                print("Could not understand audio")
+                self.logger.error("Could not understand audio")
                 return None
+        self.logger.debug(f"Detected speech: {speech} ")
 
         return speech
 
     def determine_assistant(self, speech: str) -> str:
         assistant = self.classification_llm.process(speech=speech)
-        print("Selected assistant: ", assistant)
+        self.logger.debug(f"Selected assistant: {assistant}")
         return assistant

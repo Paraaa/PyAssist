@@ -7,22 +7,28 @@ from utils.settings.logger_settings import LOGDIR
 class LOGGER:
     def __init__(self, name: str, log_file: str, level: int = logging.INFO):
         self.log_path = f"{LOGDIR}{log_file}"
+        logging.basicConfig(
+            filename=self.log_path,
+            level=logging.INFO,
+            format="[%(asctime)s] [%(name)s] [%(levelname)s]: %(message)s",
+        )
         self.logger = logging.getLogger(name)
+        print(self.logger)
         # Set the log level to capture all log messages above the set level
         self.logger.setLevel(level)
-
-        # Create handlers
-        c_handler = logging.StreamHandler()
-        formatter = logging.Formatter(
-            "[%(asctime)s] [%(name)s] [%(levelname)s]: %(message)s"
-        )
-        c_handler.setFormatter(formatter)
-        self.logger.addHandler(c_handler)
-
         self._create_log_file()
-        f_handler = logging.FileHandler(self.log_path)
-        f_handler.setFormatter(formatter)
-        self.logger.addHandler(f_handler)
+
+        # # Create handlers
+        # c_handler = logging.StreamHandler()
+        # formatter = logging.Formatter(
+        #     "[%(asctime)s] [%(name)s] [%(levelname)s]: %(message)s"
+        # )
+        # c_handler.setFormatter(formatter)
+        # self.logger.addHandler(c_handler)
+
+        # f_handler = logging.FileHandler(self.log_path)
+        # f_handler.setFormatter(formatter)
+        # self.logger.addHandler(f_handler)
 
     def _create_log_file(self):
         os.makedirs(os.path.dirname(self.log_path), exist_ok=True),

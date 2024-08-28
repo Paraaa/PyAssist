@@ -3,6 +3,7 @@ import numpy as np
 from TTS.api import TTS
 from abc import ABC, abstractmethod
 from typing import Optional
+from utils.logging.logger import LOGGER
 
 from utils.settings.audio_settings import (
     MODEL_NAME,
@@ -15,6 +16,8 @@ from utils.settings.audio_settings import (
 
 class AbstractAssistant(ABC):
     def __init__(self) -> None:
+        self.logger = LOGGER("AbstractAssistant", "assistant/abstract_assistant.log")
+
         self.tts_engine = TTS(model_name=MODEL_NAME)
         self.assistant_id = None
 
@@ -35,7 +38,7 @@ class AbstractAssistant(ABC):
 
     def say(self, text: str) -> None:
         text = self.sanitize_text(text)
-        print("Sanitizing text: ", text)
+        self.logger.debug(f"Playing audio for response: {text}")
         wav = np.array(self.tts_engine.tts(text))
         self.play_audio(wav)
 
@@ -52,4 +55,4 @@ class AbstractAssistant(ABC):
             audio_bytes = audio_data.tobytes()
             stream.write(audio_bytes)
         except Exception as e:
-            print(f"Error playing audio: {e}")
+            self.logger.exception(f"Exception playing audio: {str(e)}")

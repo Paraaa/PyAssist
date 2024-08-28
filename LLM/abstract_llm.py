@@ -1,15 +1,17 @@
 import json
 from openai import OpenAI
-from utils.env import OPEN_AI_API_KEY
+from env import OPEN_AI_API_KEY
 from utils.settings.llm_settings import MODEL
 from abc import ABC, abstractmethod
 from typing import List, Dict
+from utils.logging.logger import LOGGER
 
 
 class LLM(ABC):
 
     def __init__(self):
         self.client = OpenAI(api_key=OPEN_AI_API_KEY)  # Initialize the OpenAI client
+        self.logger = LOGGER("LLM", "llm/abstract_llm.log")
 
     def ask(
         self, prompt: str, max_tokens: int = 60, history: List[Dict[str, str]] = []
@@ -38,13 +40,13 @@ class LLM(ABC):
         try:
             return json.loads(response)
         except json.JSONDecodeError:
+            self.logger.exception(f"JSON decoding failed for {response}")
             return {}
 
     @abstractmethod
     def process(self, *args, **kwargs):
         pass  # Implement this method in subclasses to handle processing of messages
 
-    # TODO: Extract this to a seperate file for each llm assistant with unique replace symbols?
     @abstractmethod
     def format_prompt(self, prompt: str = ""):
         pass  # Implement this method in subclasses format the prompt for the desired function

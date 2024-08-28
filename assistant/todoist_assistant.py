@@ -2,11 +2,12 @@ from typing import Optional
 from assistant.abstract_assistant import AbstractAssistant
 from todoist_api_python.api import TodoistAPI
 from todoist_api_python.models import Project, Task
-from utils.env import TODOIST_API_KEY
+from env import TODOIST_API_KEY
 from utils.settings.todoist_settings import PROJECT_ID
 from utils.settings.default_messages_settings import DEFAULT_RESPONSES
 from typing import List, Dict, Union
 from LLM.todoist_llm import TODOIST_LLM
+from utils.logging.logger import LOGGER
 
 
 class TodoistAssistant(AbstractAssistant):
@@ -16,6 +17,7 @@ class TodoistAssistant(AbstractAssistant):
         self.assistant_id = "Todoist"
         self.todoist_api = TodoistAPI(TODOIST_API_KEY)
         self.todoist_llm = TODOIST_LLM()
+        self.logger = LOGGER("TodoistAssistant", "assistant/todoist_assistant.log")
 
     def respond(self, speech: Optional[str] = "") -> None:
         if not speech:
@@ -25,14 +27,16 @@ class TodoistAssistant(AbstractAssistant):
         if not response:
             return
         function = response.get("function", None)
-        print(response)
         match function:
             case "create_task":
                 self.create_task(response)
+                self.logger.debug("create_task")
             case "list_tasks":
                 self.list_tasks(response)
+                self.logger.debug("list_tasks")
             case _:
                 self.say(DEFAULT_RESPONSES.get("ERROR", ""))
+                self.logger.error("Could not determine the task")
 
     def create_task(self, response: Dict[str, str]):
         # If the section_id is an empty string set it to None
@@ -43,13 +47,16 @@ class TodoistAssistant(AbstractAssistant):
                 self.todoist_api.add_task(
                     task_content, project_id=PROJECT_ID, section_id=section_id
                 )
+                self.logger.info(f"Task '{task_content}' created successfully")
                 self.say(f"Die Aufgabe '{task_content}' wurde erstellt.")
         except Exception as e:
+            self.logger.exception(f"Error creating task: {str(e)}")
             self.say(DEFAULT_RESPONSES.get("ERROR", ""))
 
     def list_tasks(self, response: Dict[str, str]):
         tasks_content = response.get("tasks_content", [])
         if not tasks_content:
+            self.logger.debug("No tasks found")
             self.say(f"Du hast keine passenden aktiven Aufgaben")
 
         self.say(f"Auf deine Lister stehen folgende Aufgaben")
@@ -73,4 +80,5 @@ class TodoistAssistant(AbstractAssistant):
             "active_tasks": active_tasks,
             "sections": sections,
         }
+        self.logger.debug(f"Retrieved project data: {project}")
         return project

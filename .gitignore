@@ -1,5 +1,5 @@
 # API
-utils/env.py
+env.py
 
 # Other extensions
 .VSCodeCounter

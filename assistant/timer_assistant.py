@@ -3,6 +3,7 @@ from utils.settings.default_messages_settings import DEFAULT_RESPONSES, TIMER_RE
 from utils.timer_utils.elapsed_timer import ElapsedTimer
 from LLM.timer_llm import TIMER_LLM
 from typing import Optional, Dict
+from utils.logging.logger import LOGGER
 
 
 class TimerAssistant(AbstractAssistant):
@@ -12,6 +13,7 @@ class TimerAssistant(AbstractAssistant):
         self.assistant_id = "Timer"
         self.active_timer: Dict[str, ElapsedTimer] = {}
         self.timer_llm = TIMER_LLM()
+        self.logger = LOGGER("TimerAssistant", "assistant/timer_assistant.log")
 
     def respond(self, speech: Optional[str] = "") -> None:
         if not speech:
@@ -19,6 +21,7 @@ class TimerAssistant(AbstractAssistant):
         response = self.timer_llm.process(speech=speech)
         # Check if the response is empty, i. e. if the llm did not format the response correctly
         if not response:
+            self.logger.error(f"No response or wrong format {response}")
             self.say(DEFAULT_RESPONSES.get("ERROR", ""))
         self.classify_task(response)
 
@@ -31,12 +34,16 @@ class TimerAssistant(AbstractAssistant):
                     duration=response.get("duration", ""),
                     time_text=response.get("time_text", ""),
                 )
+                self.logger.debug("start_timer")
             case "end_timer":
                 self.end_timer(response.get("id", ""))
+                self.logger.debug("end_timer")
             case "time_left":
                 self.tell_time(response.get("id", ""))
+                self.logger.debug("time_left")
             case _:
                 self.say(DEFAULT_RESPONSES.get("ERROR", ""))
+                self.logger.error("Could not determine the task")
 
     def start_timer(
         self,
@@ -45,15 +52,18 @@ class TimerAssistant(AbstractAssistant):
         time_text: Optional[str] = "",
     ):
         if not duration:
+            self.logger.debug("Timer duration is missing")
             self.say(TIMER_RESPONSES.get("TIMER_DURATION_MISSING", ""))
             return
 
         if not id:
             id = str(len(self.active_timer) + 1)
+            self.logger.debug(f"Timer id is missing setting id to: {id}")
 
         try:
             duration = float(duration)
         except ValueError:
+            self.logger.exception("Could not convert duration to float")
             self.say(TIMER_RESPONSES.get("ERROR", ""))
             return
 
@@ -64,10 +74,14 @@ class TimerAssistant(AbstractAssistant):
 
     def end_timer(self, timer_id: str):
         if not timer_id:
+            self.logger.debug(f"Timer id is missing")
             self.say(DEFAULT_RESPONSES.get("ERROR", ""))
             return
 
         if timer_id not in self.active_timer:
+            self.logger.debug(
+                f"Timer with id: {timer_id} could not be found in: {self.active_timer}"
+            )
             self.say(TIMER_RESPONSES.get("TIMER_NOT_FOUND", ""))
             return
 
@@ -76,10 +90,15 @@ class TimerAssistant(AbstractAssistant):
 
     def tell_time(self, timer_id: str):
         if not timer_id:
+            self.logger.debug(f"Timer id is missing")
+
             self.say(DEFAULT_RESPONSES.get("ERROR", ""))
             return
 
         if timer_id not in self.active_timer:
+            self.logger.debug(
+                f"Timer with id: {timer_id} could not be found in: {self.active_timer}"
+            )
             self.say(TIMER_RESPONSES.get("TIMER_NOT_FOUND", ""))
             return
 
@@ -105,6 +124,7 @@ class TimerAssistant(AbstractAssistant):
             timer = self.active_timer[timer_id]
             timer.cancel()
             del self.active_timer[timer_id]
+            self.logger.debug(f"Removed timer {timer_id}")
 
     def notify_user(self, timer_id):
         self.remove_timer(timer_id)
