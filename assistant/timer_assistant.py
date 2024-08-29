@@ -4,7 +4,6 @@ from utils.settings.default_messages_settings import DEFAULT_RESPONSES, TIMER_RE
 from utils.timer_utils.elapsed_timer import ElapsedTimer
 from LLM.timer_llm import TIMER_LLM
 from typing import Optional, Dict
-from utils.logging.logger import LOGGER
 
 logger = logging.getLogger("TimerAssistant")
 

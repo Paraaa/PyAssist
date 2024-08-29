@@ -5,7 +5,6 @@ from env import OPEN_AI_API_KEY
 from utils.settings.llm_settings import MODEL
 from abc import ABC, abstractmethod
 from typing import List, Dict
-from utils.logging.logger import LOGGER
 
 logger = logging.getLogger("LLM")
 

@@ -4,7 +4,6 @@ import numpy as np
 from TTS.api import TTS
 from abc import ABC, abstractmethod
 from typing import Optional
-from utils.logging.logger import LOGGER
 
 from utils.settings.audio_settings import (
     MODEL_NAME,

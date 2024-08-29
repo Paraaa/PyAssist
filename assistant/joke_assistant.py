@@ -3,7 +3,6 @@ import logging
 from typing import Optional
 from assistant.abstract_assistant import AbstractAssistant
 from utils.settings.default_messages_settings import JOKE_RESPONSES
-from utils.logging.logger import LOGGER
 
 logger = logging.getLogger("JokeAssistant")
 

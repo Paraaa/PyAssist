@@ -8,7 +8,6 @@ from utils.settings.todoist_settings import PROJECT_ID
 from utils.settings.default_messages_settings import DEFAULT_RESPONSES
 from typing import List, Dict, Union
 from LLM.todoist_llm import TODOIST_LLM
-from utils.logging.logger import LOGGER
 
 logger = logging.getLogger("TodoistAssistant")
 
