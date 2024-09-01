@@ -5,5 +5,8 @@
         "editor.formatOnSave": true,
         "editor.defaultFormatter": "ms-python.black-formatter"
     },
-    "debugpy.debugJustMyCode": false
+    "debugpy.debugJustMyCode": false,
+    "cSpell.words": [
+        "LOGDIR"
+    ]
 }
