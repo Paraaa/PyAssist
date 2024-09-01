@@ -1,6 +1,6 @@
 import psutil
 import logging.config
-from wake_word.astra import Astra
+from wake_word.PyAssist import PyAssist
 from utils.settings.logger_settings import LOGGING_CONFIG
 
 
@@ -8,10 +8,10 @@ from utils.settings.logger_settings import LOGGING_CONFIG
 logging.config.dictConfig(config=LOGGING_CONFIG)
 
 if __name__ == "__main__":
-    astra = Astra()
+    PyAssist = PyAssist()
 
     while True:
-        astra.listen_to_wake_word()
+        PyAssist.listen_to_wake_word()
         # process = psutil.Process()
         # print(process.memory_info().rss)
         # print(

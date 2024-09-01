@@ -20,10 +20,10 @@ from utils.settings.assistant_settings import ASSISTANTS
 from assistant.abstract_assistant import AbstractAssistant
 from LLM.classification_llm import CLASSIFICATION_LLM
 
-logger = logging.getLogger("Astra")
+logger = logging.getLogger("PyAssist")
 
 
-class Astra:
+class PyAssist:
 
     def __init__(self) -> None:
         # Wake word detection variables

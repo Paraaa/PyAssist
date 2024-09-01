@@ -3,7 +3,7 @@ import logging
 from logging.handlers import RotatingFileHandler
 
 LOGDIR = ".log/"
-LOGFILE = "astra.log"
+LOGFILE = "PyAssist.log"
 LOGPATH = os.path.join(LOGDIR, LOGFILE)
 
 os.makedirs(LOGDIR, exist_ok=True)
@@ -21,7 +21,7 @@ WHITELISTED_LOGGERS = [
     "TimerAssistant",
     "TodoistAssistant",
     "LLM",
-    "Astra",
+    "PyAssist",
 ]
 
 
