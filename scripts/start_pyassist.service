@@ -1,0 +1,13 @@
+[Unit]
+Description=Run Pyassist after startup of the system
+After=multi-user.target
+Requires=network-online.target
+
+[Service]
+ExecStart=/bin/bash /home/piandrej/Repositories/PyAssist/scripts/startup.sh
+WorkingDirectory=/home/piandrej
+Type=simple
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target

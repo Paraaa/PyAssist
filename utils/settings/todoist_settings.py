@@ -1,1 +1,1 @@
-PROJECT_ID = "2337762329"  # Define the project ID for the todoist integration
+PROJECT_ID = "2300187020"  # Define the project ID for the todoist integration
