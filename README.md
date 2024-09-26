@@ -77,8 +77,8 @@ from assistant.abstract_assistant import AbstractAssistant
 from LLM.my_custom_llm import MyCustomLLM
 
 class MyCustomAssistant(AbstractAssistant): 
-    def init(self): 
-        super().init() 
+    def __init__(self): 
+        super().__init__() 
         # Initialize the name of the Assistant.
         # Note: This name has to match with the one you use in `utils/settings/assistant_settings.py`!
         self.assistant_id = "MyCustomAssistant" 
@@ -119,8 +119,8 @@ You'll need to create a custom LLM to process user input and generate responses.
  from LLM.abstract_llm import LLM
 
 class MyCustomLLM(LLM):
-    def init(self):
-        super().init()
+    def __init__(self):
+        super().__init__()
 
     def process(self, *args, **kwargs):
         speech = kwargs.get("speech", "")
