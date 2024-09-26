@@ -118,7 +118,9 @@ You'll need to create a custom LLM to process user input and generate responses.
 ```python
  from LLM.abstract_llm import LLM
 
-class MyCustomLLM(LLM): def init(self): super().init()
+class MyCustomLLM(LLM):
+    def init(self):
+        super().init()
 
     def process(self, *args, **kwargs):
         speech = kwargs.get("speech", "")
